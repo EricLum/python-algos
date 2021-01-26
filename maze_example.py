@@ -9,11 +9,16 @@ graph = [
     ['#', '.', '#', 'E', '.', '#', '.']
 ]
 
+# can make a somewhat simple path trace by recreating ^ but empty
+
+visited = [ ('Z', 'Z') for x in graph]
+
 class MazeSolver:
     def __init__(self, graph):
         self.graph = graph
         self.rows =  len(graph)
         self.columns = len(graph[0])
+        self.visited = [['' for _ in range(len(graph[0]))] for y in range(len(graph))]
         #direction vectors
         self.dx = [1, 0, 0, -1]
         self.dy = [0, -1, 1, 0]
@@ -36,6 +41,8 @@ class MazeSolver:
 
 
             if currentNode == 'E':
+                print(currentY)
+                print(currentX)
                 return 'found'
 
             # mark as visited
@@ -60,8 +67,28 @@ class MazeSolver:
                 # add to queue
                 self.qx.append(testX)
                 self.qy.append(testY)
-        
+               
+                # mark ancestor in visted for path reconstruction
+                self.visited[testY][testX] = y,x
+    
+    def print_visited(self):
+        print(self.visited)
+
+    def reconstructPath(self, y, x):
+        # given y and x and the visited array, keep printing out visiteds from y,x until you get to start or ''
+        tempY = y 
+        tempX = x
+        while tempY != 'Z' and tempX != 'Z':
+            a,b = self.visited[tempY][tempX]
+            if (a == 'Z' and b == 'Z'):
+                return
+            tempY = a
+            tempX = b
+            print(tempY, tempX)
+            # need 2 figure out how 2 add the last node
         
 
 maze = MazeSolver(graph)
 maze.solve()
+# maze.print_visited()
+maze.reconstructPath(4,3)
