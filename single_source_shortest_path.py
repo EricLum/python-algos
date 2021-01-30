@@ -18,7 +18,6 @@ class SSSP:
     def __init__(self, graph):
         self.graph = graph
         self.output = {'A': 0, 'B': float('inf'),'C': float('inf'),'D': float('inf'),'E': float('inf'),'F': float('inf'),'G': float('inf'), 'H': float('inf')}
-        self.visited = []
     
     def solve(self):
         # we know to start with A since its the single source.
@@ -29,11 +28,10 @@ class SSSP:
             current = queue.pop()
             for edge in graph[current]:
                 destination, length = edge
-                if not destination in self.visited:
-                    queue.append(destination)
-                    if self.output[current] + length < self.output[destination]:
-                        # update path length to destination
-                        self.output[destination] = self.output[current] + length
+                queue.append(destination)
+                if self.output[current] + length < self.output[destination]:
+                    # update path length to destination
+                    self.output[destination] = self.output[current] + length
     
         return self.output
 
